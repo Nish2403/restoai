@@ -1,5 +1,7 @@
 import requests
 import streamlit as st
+from gtts import gTTS
+import tempfile
 
 st.set_page_config(page_title="Resto AI", layout="centered")
 st.title("Welcome to Resto AI ! ")
@@ -32,5 +34,11 @@ if prompt:
     st.session_state.messages.append({"role": "assistant", "content": answer})
     with st.chat_message("assistant"):
         st.markdown(answer)
+        tts = gTTS(text=answer, lang="en")
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".mp3") as fp:
+        tts.save(fp.name)
+        audio_file = fp.name
+    st.audio(audio_file, format="audio/mp3",autoplay=True)
+
 
 
